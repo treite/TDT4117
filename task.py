@@ -103,7 +103,7 @@ def preprocessing(query, dictionary):
 paragraphs = createParagraphList("pg3300.txt")
 filtered_paragraphs = filtering(paragraphs, "Gutenberg")
 
-"""
+
 tokenized_paragraphs = tokenize(filtered_paragraphs)
 with open('tokenized_paragraphs.pkl', 'wb') as file:
     pickle.dump(tokenized_paragraphs, file)
@@ -117,7 +117,7 @@ with open('tokenized_paragraphs.pkl', 'rb') as file:
 # Load stemmed data
 with open('stemmed_paragraphs.pkl', 'rb') as file:
     stemmed_paragraphs = pickle.load(file)
-
+"""
 dictionary = gensim.corpora.Dictionary(stemmed_paragraphs)
 stopwords = stopword("stopwords.txt")
 stop_ids = [dictionary.token2id[stopword] for stopword in stopwords if stopword in dictionary.token2id]
