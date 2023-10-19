@@ -99,14 +99,16 @@ def preprocessing(query, dictionary):
         corpus.append(dictionary.doc2bow(word))
     return corpus
 
-
+# 1.1 & 1.2 & 1.3
 paragraphs = createParagraphList("pg3300.txt")
 filtered_paragraphs = filtering(paragraphs, "Gutenberg")
 
-
+# 1.4 & 1.5
 tokenized_paragraphs = tokenize(filtered_paragraphs)
 with open('tokenized_paragraphs.pkl', 'wb') as file:
     pickle.dump(tokenized_paragraphs, file)
+
+# 1.6
 stemmed_paragraphs = stemmer(tokenized_paragraphs)
 with open('stemmed_paragraphs.pkl', 'wb') as file:
     pickle.dump(stemmed_paragraphs, file)
@@ -118,25 +120,32 @@ with open('tokenized_paragraphs.pkl', 'rb') as file:
 with open('stemmed_paragraphs.pkl', 'rb') as file:
     stemmed_paragraphs = pickle.load(file)
 """
+
+# 2.1
 dictionary = gensim.corpora.Dictionary(stemmed_paragraphs)
 stopwords = stopword("stopwords.txt")
 stop_ids = [dictionary.token2id[stopword] for stopword in stopwords if stopword in dictionary.token2id]
 dictionary.filter_tokens(stop_ids)
 
+# 2.2
 corpus = []
 for paragraph in stemmed_paragraphs: 
     corpus.append(dictionary.doc2bow(paragraph))
 
+# 3.1 & 3.2 & 3.3
 tfidf_model = gensim.models.TfidfModel(corpus)
 tfidf_corpus = tfidf_model[corpus]
 tfidf_index = gensim.similarities.MatrixSimilarity(corpus, dictionary)
 
+# 3.4
 lsi_model = gensim.models.LsiModel(tfidf_corpus, id2word=dictionary, num_topics=100)
 lsi_corpus = lsi_model[tfidf_corpus]
 lsi_index = gensim.similarities.MatrixSimilarity(lsi_corpus, num_features=len(dictionary))
 
+# 3.5
 #print(lsi_model.show_topics(3))
 
+# 4.1
 query = preprocessing("What is the function of money?", dictionary)
 tfidf_query = tfidf_model[query][0]
 
